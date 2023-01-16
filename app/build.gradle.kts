@@ -14,6 +14,9 @@ dependencies {
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.junit.platform:junit-platform-suite:1.9.2")
+    testImplementation("io.cucumber:cucumber-java:7.11.0")
+    testImplementation("io.cucumber:cucumber-junit-platform-engine:7.11.0")
 }
 
 application {
