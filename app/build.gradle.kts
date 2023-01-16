@@ -13,10 +13,14 @@ dependencies {
     implementation("com.google.guava:guava:31.0.1-jre")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+    testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
     testImplementation("org.junit.platform:junit-platform-suite:1.9.2")
     testImplementation("io.cucumber:cucumber-java:7.11.0")
     testImplementation("io.cucumber:cucumber-junit-platform-engine:7.11.0")
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 application {
