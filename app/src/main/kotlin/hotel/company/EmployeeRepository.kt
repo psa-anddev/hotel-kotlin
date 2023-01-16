@@ -10,7 +10,6 @@ class EmployeeRepository {
        employees += Employee(company, employee)
    } 
 
-   fun findBy(employee: EmployeeId): Employee {
-       return employees.find { it.employee == employee } ?: throw Exception("Not found")
-   }
+   fun findBy(employee: EmployeeId): Employee =
+       employees.find { it.employee == employee } ?: throw Exception("Not found")
 }
