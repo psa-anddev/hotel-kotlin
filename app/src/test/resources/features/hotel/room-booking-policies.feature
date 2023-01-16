@@ -4,4 +4,4 @@ Feature: Room booking policies
     So that I can control who is booking every room
 
     Scenario: No policies defined
-        Given "Hotel Los Lebreros" belongs to "Meliá"
+        Given "Ben Dover" works for "Meliá"
