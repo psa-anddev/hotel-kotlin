@@ -33,6 +33,10 @@ class BookingPolicySteps(private val bookingPolicyService: BookingPolicyService)
             bookingPolicyService.setCompanyPolicy(companyId, roomType)
         }
 
+        Given("{employee} can book {room-type} rooms") { employeeId: EmployeeId, roomType: RoomType -> 
+            bookingPolicyService.setEmployeePolicy(employeeId, roomType)
+        }
+
         When("I check if {employee} can book a {room-type} room") { employee: EmployeeId, roomType: RoomType ->
             bookingAllowed = bookingPolicyService.isBookingAllowed(employee, roomType)
         }

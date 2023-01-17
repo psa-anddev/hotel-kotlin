@@ -62,6 +62,37 @@ class BookingPolicyServiceSpec: ShouldSpec({
        bookingPolicyService.isBookingAllowed(employeeId, DOUBLE) shouldBe false
    }
 
+   should("be able to book a single room when allowed by employee policy") {
+       val employeesRepository = mockk<EmployeeRepository>()
+       val companyPoliciesRepository = mockk<CompanyPoliciesRepository>()
+       val employeePoliciesRepository = mockk<EmployeePoliciesRepository>()
+       val bookingPolicyService = BookingPolicyService(employeesRepository, companyPoliciesRepository, employeePoliciesRepository)
+       val employeeId = EmployeeId(80)
+       val companyId = CompanyId(85)
+
+       every { employeesRepository.findBy(employeeId) } returns Employee(companyId, employeeId)
+       every { employeePoliciesRepository.findBy(employeeId) } returns listOf(SINGLE)
+       every { companyPoliciesRepository.findBy(companyId) } returns emptyList()
+
+       bookingPolicyService.isBookingAllowed(employeeId, SINGLE) shouldBe true
+   }
+
+   should("not be able to book a double room when employee policy allows only single room bookings") {
+       val employeesRepository = mockk<EmployeeRepository>()
+       val companyPoliciesRepository = mockk<CompanyPoliciesRepository>()
+       val employeePoliciesRepository = mockk<EmployeePoliciesRepository>()
+       val bookingPolicyService = BookingPolicyService(employeesRepository, companyPoliciesRepository, employeePoliciesRepository)
+       val employeeId = EmployeeId(80)
+       val companyId = CompanyId(85)
+
+       every { employeesRepository.findBy(employeeId) } returns Employee(companyId, employeeId)
+       every { employeePoliciesRepository.findBy(employeeId) } returns listOf(SINGLE)
+       every { companyPoliciesRepository.findBy(companyId) } returns emptyList()
+
+       bookingPolicyService.isBookingAllowed(employeeId, DOUBLE) shouldBe false
+   }
+
+
    should("add company policies") {
        val companyPoliciesRepository = mockk<CompanyPoliciesRepository>()
        val service = BookingPolicyService(mockk(), companyPoliciesRepository, mockk())
@@ -73,5 +104,17 @@ class BookingPolicyServiceSpec: ShouldSpec({
        service.setCompanyPolicy(companyId, SINGLE, JUNIOR_SUITE)
 
        verify { companyPoliciesRepository.add(companyId, roomTypes) }
+   }
+
+   should("set employee policies") {
+       val employeePoliciesRepository = mockk<EmployeePoliciesRepository>()
+       val service = BookingPolicyService(mockk(), mockk(), employeePoliciesRepository)
+       val employeeId = EmployeeId((1..Int.MAX_VALUE).random())
+
+       every { employeePoliciesRepository.add(employeeId, listOf(DOUBLE, MASTER_SUITE)) } just Runs
+
+       service.setEmployeePolicy(employeeId, DOUBLE, MASTER_SUITE)
+
+       verify { employeePoliciesRepository.add(employeeId, listOf(DOUBLE, MASTER_SUITE)) }
    }
 })
