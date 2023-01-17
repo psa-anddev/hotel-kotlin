@@ -16,3 +16,12 @@ Feature: Room booking policies
             | double       |
             | junior suite |
             | master suite |
+
+    Scenario Template: Company policies defined 
+        Given "Rubin Monkey" works for "NH"
+        And "NH" employees can book "<allowed-room-type>"
+
+
+        Examples:
+            | allowed-room-type | room-type | result   |
+            | single            | single    | allowed  |

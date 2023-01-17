@@ -9,6 +9,7 @@ import hotel.EmployeeId
 import hotel.CompanyId
 import hotel.Employee
 import hotel.RoomType
+import hotel.RoomType.*
 import kotlin.collections.emptyList
 
 class BookingPolicyServiceSpec: ShouldSpec({
@@ -29,5 +30,18 @@ class BookingPolicyServiceSpec: ShouldSpec({
        bookingPolicyService.isBookingAllowed(employeeId, RoomType.JUNIOR_SUITE) shouldBe true
        bookingPolicyService.isBookingAllowed(employeeId, RoomType.MASTER_SUITE) shouldBe true
 
+   }
+
+   should("add company policies") {
+       val companyPoliciesRepository = mockk<CompanyPoliciesRepository>()
+       val service = BookingPolicyService(mockk(), companyPoliciesRepository, mockk())
+       val companyId = CompanyId(80)
+       val roomTypes = listOf(SINGLE, JUNIOR_SUITE)
+
+       every { companyPoliciesRepository.add(companyId, roomTypes) } just Runs
+
+       service.setCompanyPolicy(companyId, SINGLE, JUNIOR_SUITE)
+
+       verify { companyPoliciesRepository.add(companyId, roomTypes) }
    }
 })
