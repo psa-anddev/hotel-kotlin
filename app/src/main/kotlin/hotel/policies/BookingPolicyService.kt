@@ -13,7 +13,9 @@ class BookingPolicyService(
     fun setCompanyPolicy(companyId: CompanyId, roomType: RoomType, vararg additionalRoomTypes: RoomType) {
         companyPoliciesRepository.add(companyId, listOf(roomType) + additionalRoomTypes)
     }
-   fun isBookingAllowed(employee: EmployeeId, roomType: RoomType): Boolean {
-       return true
+   fun isBookingAllowed(employeeId: EmployeeId, roomType: RoomType): Boolean {
+       val employee = employeesRepository.findBy(employeeId)
+       val companyPolicy = companyPoliciesRepository.findBy(employee.company)
+       return companyPolicy.isEmpty() || companyPolicy.contains(roomType)
    } 
 }

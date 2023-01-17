@@ -20,8 +20,26 @@ Feature: Room booking policies
     Scenario Template: Company policies defined 
         Given "Rubin Monkey" works for "NH"
         And "NH" employees can book "<allowed-room-type>"
+        And no employee booking policy has been established for "Rubin Monkey"
+        When I check if "Rubin Monkey" can book a "<room-type>" room
+        Then "Rubin Monkey" is <result> to book a "<room-type>" room
 
 
         Examples:
-            | allowed-room-type | room-type | result   |
-            | single            | single    | allowed  |
+            | allowed-room-type | room-type     | result   |
+            | single            | single        | allowed  |
+            | single            | double        | denied   |
+            | single            | junior suite  | denied   |
+            | single            | master suite  | denied   |
+            | double            | single        | denied   |
+            | double            | double        | allowed  |
+            | double            | junior suite  | denied   |
+            | double            | master suite  | denied   |
+            | junior suite      | single        | denied   |
+            | junior suite      | double        | denied   |
+            | junior suite      | junior suite  | allowed  |
+            | junior suite      | master suite  | denied   |
+            | master suite      | single        | denied   |
+            | master suite      | double        | denied   |
+            | master suite      | junior suite  | denied   |
+            | master suite      | master suite  | allowed  |
