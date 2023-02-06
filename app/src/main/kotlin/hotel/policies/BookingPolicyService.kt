@@ -19,7 +19,7 @@ class BookingPolicyService(
     }
    fun isBookingAllowed(employeeId: EmployeeId, roomType: RoomType): Boolean =
        with( employeesRepository.findBy(employeeId)) {
-           employee.canBook(roomType) ?: true && company.canBook(roomType)
+           employee.canBook(roomType) ?: company.canBook(roomType)
        }
 
    private fun EmployeeId.canBook(roomType: RoomType) : Boolean? {
