@@ -1,6 +1,6 @@
-- name: Continuous Integration
-  on: [push]
-  jobs:
-    Build:
-      steps:
-        - run: ./gradlew build
+name: Continuous Integration
+on: [push]
+jobs:
+  Build:
+    steps:
+      - run: ./gradlew build
