@@ -9,12 +9,19 @@ import hotel.*
 import hotel.bookings.*
 import hotel.hotel.HotelDoesNotExist
 
-class BookingSteps(private val bookingService: BookingService): En {
+class BookingSteps(
+    private val bookingService: BookingService,
+    private val bookingRepository: BookingsRepository): En {
     private var booking: Booking? = null
     private var error: Throwable? = null
     init {
         ParameterType("date", "\\d{2}/\\d{2}/\\d{4}") {
             dateString: String -> LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy"))
+        }
+
+        Given("{hotel} room {int} is booked from {date} to {date}") { 
+            hotel: Hotel, roomNumber: Int, from: LocalDate, to:LocalDate ->
+                bookingRepository.add(EmployeeId(200), hotel.id, roomNumber, from, to)
         }
 
         When("{employee} books a {room-type} room in {hotel} from {date} to {date}") {

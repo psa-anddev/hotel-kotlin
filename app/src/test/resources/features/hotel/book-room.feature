@@ -40,3 +40,14 @@ Feature: Book a room
         And "Bruce Banner" can book "double" rooms 
         When "Bruce Banner" books a "junior suite" room in "Hotel Marvel" from 12/12/2023 to 15/12/2023 
         Then "Bruce Banner" gets a booking denied error
+
+    Scenario: The booked room is that which is available through the whole duration of the stay
+        Given "John Smith" works for "Phillippines Hotels"
+        And "Michael Mann" is a hotel manager
+        And "Michael Mann" added "Hotel Luzon"
+        And "Hotel Luzon" room 102 is a "single" room 
+        And "Hotel Luzon" room 110 is a "double" room
+        And "Hotel Luzon" room 201 is a "single" room 
+        And "Hotel Luzon" room 102 is booked from 10/03/2023 to 15/03/2023
+        When "John Smith" books a "single" room in "Hotel Luzon" from 13/03/2023 to 20/03/2023
+        Then "John Smith" gets a booking confirmation for room 201 in "Hotel Luzon" from 13/03/2023 to 20/03/2023

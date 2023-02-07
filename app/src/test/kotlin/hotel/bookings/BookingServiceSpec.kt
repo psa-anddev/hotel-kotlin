@@ -97,4 +97,37 @@ class BookingServiceSpec: ShouldSpec({
            bookingService.book(employeeId, hotelId, RoomType.SINGLE, from, to)
        }
    }
+
+   should("book the first room that is available") {
+       val hotelService = mockk<HotelService>()
+       val bookingPolicyService = mockk<BookingPolicyService>()
+       val bookingsRepository = mockk<BookingsRepository>()
+       val bookingService = 
+           BookingService(hotelService, bookingPolicyService, bookingsRepository)
+       val employeeId = EmployeeId(1066)
+       val hotelId = 500
+       val bookedRoomNumber = 103
+       val roomNumber = 300
+       val hotelInfo = 
+            HotelInfo(
+                Hotel(500, "Premier Inn Croydon"),
+                listOf(
+                    Room(bookedRoomNumber, RoomType.SINGLE),
+                    Room(roomNumber, RoomType.SINGLE)))
+       val from = LocalDate.parse("2023-02-20")
+       val to = LocalDate.parse("2023-02-22")
+       val bookedFrom = LocalDate.parse("2023-02-18")
+       val bookedTo = LocalDate.parse("2023-02-21")
+       val expectedBooking = Booking(employeeId, hotelId, roomNumber, from, to)
+
+       every { hotelService.findHotelBy(hotelId) } returns hotelInfo
+       every { bookingPolicyService.isBookingAllowed(employeeId, RoomType.SINGLE) } returns true
+       every { bookingsRepository.findBy(hotelId, bookedRoomNumber) } returns listOf(Booking(employeeId, hotelId, bookedRoomNumber, bookedFrom, bookedTo))
+       every { bookingsRepository.findBy(hotelId, roomNumber) } returns emptyList()
+       every { bookingsRepository.add(employeeId, hotelId, roomNumber, from, to) } returns expectedBooking
+
+       val actualBooking = bookingService.book(employeeId, hotelId, RoomType.SINGLE, from, to)
+
+       actualBooking shouldBe expectedBooking
+   }
 })
