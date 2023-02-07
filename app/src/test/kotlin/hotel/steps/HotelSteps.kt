@@ -22,5 +22,7 @@ class HotelSteps(
         Given("{hotel} room {int} is a {room-type} room") { hotel: Hotel, roomNumber: Int, roomType: RoomType ->
             hotelService.setRoom(hotel.id, roomNumber, roomType)
         }
+
+        Given("there is no such hotel as {hotel}") { _: Hotel -> }
     }
 }

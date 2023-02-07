@@ -18,3 +18,9 @@ Feature: Book a room
         And "Hotel NH Barcelona" room 540 is a "junior suite" room 
         When "Bruce Wayne" books a "junior suite" room in "Hotel NH Barcelona" from 15/05/2023 to 15/05/2023 
         Then "Bruce Wayne" gets an invalid timeframe for booking error
+
+    Scenario: Booking in a hotel that does not exist
+        Given "Peter Parker" works for "Travelodge"
+        And there is no such hotel as "Hotel Humility"
+        When "Peter Parker" books a "double" room in "hotel Humility" from 20/06/2023 to 22/06/2023 
+        Then "Peter Parker" gets a hotel does not exist error

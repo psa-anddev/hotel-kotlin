@@ -7,6 +7,7 @@ import java.time.*
 import java.time.format.*
 import hotel.*
 import hotel.bookings.*
+import hotel.hotel.HotelDoesNotExist
 
 class BookingSteps(private val bookingService: BookingService): En {
     private var booking: Booking? = null
@@ -33,6 +34,10 @@ class BookingSteps(private val bookingService: BookingService): En {
 
         Then("{employee} gets an invalid timeframe for booking error") { employee: EmployeeId ->
             error.shouldBeInstanceOf<InvalidTimeframeForBooking>()
+        }
+
+        Then("{employee} gets a hotel does not exist error") { _: EmployeeId ->
+            error.shouldBeInstanceOf<HotelDoesNotExist>()
         }
     }
     
