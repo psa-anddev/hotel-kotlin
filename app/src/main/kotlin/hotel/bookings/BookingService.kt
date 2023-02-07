@@ -21,6 +21,8 @@ class BookingService(
         to: LocalDate): Booking {
         if (ChronoUnit.DAYS.between(from, to) <= 1L)
             throw InvalidTimeframeForBooking()
+        if (!bookingPolicyService.isBookingAllowed(employeeId, roomType))
+            throw BookingDenied()
        val hotelInfo = hotelService.findHotelBy(hotelId)
        val room = hotelInfo.findRoomsBy(roomType).firstOrNull()
        if (room == null)
@@ -31,3 +33,4 @@ class BookingService(
 
 class InvalidTimeframeForBooking: Throwable()
 class NoRoomTypeAvailable: Throwable()
+class BookingDenied: Throwable()

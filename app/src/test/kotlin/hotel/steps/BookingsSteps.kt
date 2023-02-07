@@ -43,6 +43,10 @@ class BookingSteps(private val bookingService: BookingService): En {
         Then("{employee} gets a no room type available error") { _: EmployeeId ->
             error.shouldBeInstanceOf<NoRoomTypeAvailable>()
         }
+
+        Then("{employee} gets a booking denied error") { _: EmployeeId -> 
+            error.shouldBeInstanceOf<BookingDenied>()
+        }
     }
     
 }

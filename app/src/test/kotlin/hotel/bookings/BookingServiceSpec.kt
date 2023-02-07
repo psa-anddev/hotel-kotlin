@@ -65,12 +65,36 @@ class BookingServiceSpec: ShouldSpec({
        val to = LocalDate.parse("2023-02-22")
 
        every { hotelService.findHotelBy(hotelId) } returns hotelInfo
-       every { bookingPolicyService.isBookingAllowed(employeeId, RoomType.SINGLE) } returns true
+       every { bookingPolicyService.isBookingAllowed(employeeId, RoomType.DOUBLE) } returns true
        every { bookingsRepository.findBy(hotelId, roomNumber) } returns emptyList()
 
        shouldThrow<NoRoomTypeAvailable> {
            bookingService.book(employeeId, hotelId, RoomType.DOUBLE, from, to)
        }
+   }
 
+   should("throw booking denied error when booking policies prevent the booking from happening") {
+       val hotelService = mockk<HotelService>()
+       val bookingPolicyService = mockk<BookingPolicyService>()
+       val bookingsRepository = mockk<BookingsRepository>()
+       val bookingService = 
+           BookingService(hotelService, bookingPolicyService, bookingsRepository)
+       val employeeId = EmployeeId(1066)
+       val hotelId = 500
+       val roomNumber = 300
+       val hotelInfo = 
+            HotelInfo(
+                Hotel(500, "Premier Inn Croydon"),
+                listOf(Room(roomNumber, RoomType.SINGLE)))
+       val from = LocalDate.parse("2023-02-20")
+       val to = LocalDate.parse("2023-02-22")
+
+       every { hotelService.findHotelBy(hotelId) } returns hotelInfo
+       every { bookingPolicyService.isBookingAllowed(employeeId, RoomType.SINGLE) } returns false
+       every { bookingsRepository.findBy(hotelId, roomNumber) } returns emptyList()
+
+       shouldThrow<BookingDenied> {
+           bookingService.book(employeeId, hotelId, RoomType.SINGLE, from, to)
+       }
    }
 })

@@ -32,3 +32,11 @@ Feature: Book a room
         And "Hilton London" doesn't have any "single" rooms
         When "Optimus Prime" books a "single" room in "Hilton London" from 21/01/2024 to 21/02/2024 
         Then "Optimus Prime" gets a no room type available error
+
+    Scenario: Booking policies prevent the employee from booking a room of the given type 
+        Given "Bruce Banner" works for "easyHotel"
+        And "Scott Lang" is a hotel manager 
+        And "Scott Lang" added "Hotel Marvel"
+        And "Bruce Banner" can book "double" rooms 
+        When "Bruce Banner" books a "junior suite" room in "Hotel Marvel" from 12/12/2023 to 15/12/2023 
+        Then "Bruce Banner" gets a booking denied error
