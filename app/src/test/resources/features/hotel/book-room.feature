@@ -10,3 +10,11 @@ Feature: Book a room
         And "Hotel Los Lebreros" room 230 is a "single" room
         When "Diana Prince" books a "single" room in "Hotel Los Lebreros" from 10/02/2023 to 12/02/2023
         Then "Diana Prince" gets a booking confirmation for room 230 in "Hotel Los Lebreros" from 10/02/2023 to 12/02/2023
+
+    Scenario: Check out date same as check in date 
+        Given "Bruce Wayne" works for "NH"
+        And "Rubin Monkey" is a hotel manager 
+        And "Rubin Monkey" added "Hotel NH Barcelona"
+        And "Hotel NH Barcelona" room 540 is a "junior suite" room 
+        When "Bruce Wayne" books a "junior suite" room in "Hotel NH Barcelona" from 15/05/2023 to 15/05/2023 
+        Then "Bruce Wayne" gets an invalid timeframe for booking error

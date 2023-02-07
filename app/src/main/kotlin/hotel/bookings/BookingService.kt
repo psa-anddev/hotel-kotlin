@@ -6,6 +6,8 @@ import hotel.Booking
 import hotel.hotel.HotelService
 import hotel.policies.BookingPolicyService
 import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.time.days
 
 class BookingService(
     private val hotelService: HotelService,
@@ -17,8 +19,14 @@ class BookingService(
         roomType: RoomType, 
         from: LocalDate, 
         to: LocalDate): Booking {
+        if (ChronoUnit.DAYS.between(from, to) <= 1L)
+            throw InvalidTimeframeForBooking()
        val hotelInfo = hotelService.findHotelBy(hotelId)
        val room = hotelInfo.findRoomsBy(roomType).first()
        return bookingsRepository.add(employeeId, hotelId, room.number, from, to)
    } 
+}
+
+class InvalidTimeframeForBooking: Throwable() {
+    
 }

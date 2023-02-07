@@ -1,6 +1,7 @@
 package hotel.bookings
 
 import io.kotest.matchers.*
+import io.kotest.assertions.throwables.*
 import io.kotest.core.spec.style.*
 import io.mockk.*
 import hotel.hotel.HotelService
@@ -35,5 +36,15 @@ class BookingServiceSpec: ShouldSpec({
        val actualBooking = bookingService.book(employeeId, hotelId, RoomType.SINGLE, from, to)
 
        actualBooking shouldBe expectedBooking
+   }
+
+   should("check that there is at least 1 day between check in and check out") {
+       val from = LocalDate.parse("2023-05-20")
+       val to = LocalDate.parse("2023-05-20")
+       val bookingService = BookingService(mockk(), mockk(), mockk())
+
+       shouldThrow<InvalidTimeframeForBooking> {
+           bookingService.book(EmployeeId(1000), 320, RoomType.JUNIOR_SUITE, from, to)
+       }
    }
 })
