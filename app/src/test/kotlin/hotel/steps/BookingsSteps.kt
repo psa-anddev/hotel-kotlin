@@ -39,6 +39,10 @@ class BookingSteps(private val bookingService: BookingService): En {
         Then("{employee} gets a hotel does not exist error") { _: EmployeeId ->
             error.shouldBeInstanceOf<HotelDoesNotExist>()
         }
+
+        Then("{employee} gets a no room type available error") { _: EmployeeId ->
+            error.shouldBeInstanceOf<NoRoomTypeAvailable>()
+        }
     }
     
 }

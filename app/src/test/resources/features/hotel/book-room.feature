@@ -22,5 +22,13 @@ Feature: Book a room
     Scenario: Booking in a hotel that does not exist
         Given "Peter Parker" works for "Travelodge"
         And there is no such hotel as "Hotel Humility"
-        When "Peter Parker" books a "double" room in "hotel Humility" from 20/06/2023 to 22/06/2023 
+        When "Peter Parker" books a "double" room in "Hotel Humility" from 20/06/2023 to 22/06/2023 
         Then "Peter Parker" gets a hotel does not exist error
+
+    Scenario: Hotel without the provided room type
+        Given "Optimus Prime" works for "Hilton"
+        And "Steve Harris" is a hotel manager
+        And "Steve Harris" added "Hilton London"
+        And "Hilton London" doesn't have any "single" rooms
+        When "Optimus Prime" books a "single" room in "Hilton London" from 21/01/2024 to 21/02/2024 
+        Then "Optimus Prime" gets a no room type available error

@@ -24,5 +24,6 @@ class HotelSteps(
         }
 
         Given("there is no such hotel as {hotel}") { _: Hotel -> }
+        Given("{hotel} doesn't have any {room-type} rooms") { _: Hotel, _: RoomType -> }
     }
 }

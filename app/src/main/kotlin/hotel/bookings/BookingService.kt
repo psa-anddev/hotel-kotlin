@@ -22,11 +22,12 @@ class BookingService(
         if (ChronoUnit.DAYS.between(from, to) <= 1L)
             throw InvalidTimeframeForBooking()
        val hotelInfo = hotelService.findHotelBy(hotelId)
-       val room = hotelInfo.findRoomsBy(roomType).first()
+       val room = hotelInfo.findRoomsBy(roomType).firstOrNull()
+       if (room == null)
+        throw NoRoomTypeAvailable()
        return bookingsRepository.add(employeeId, hotelId, room.number, from, to)
    } 
 }
 
-class InvalidTimeframeForBooking: Throwable() {
-    
-}
+class InvalidTimeframeForBooking: Throwable()
+class NoRoomTypeAvailable: Throwable()
