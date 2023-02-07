@@ -1,6 +1,7 @@
 package hotel.hotel
 
 import hotel.RoomType
+import hotel.HotelInfo
 
 class HotelService(
         private val hotelRepository: HotelRepository,
@@ -19,6 +20,13 @@ class HotelService(
         roomRepository.add(hotelId, roomNumber, roomType)
     }
     
+    fun findHotelBy(hotelId: Int): HotelInfo {
+        val hotel = hotelRepository.findBy(hotelId)
+        if (hotel == null)
+            throw HotelDoesNotExist(hotelId)
+        val rooms = roomRepository.findBy(hotelId)
+        return HotelInfo(hotel, rooms)
+    }
 }
 
 class HotelExists(id: Int) : 
